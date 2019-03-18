@@ -6,6 +6,7 @@
 > * 校对者：
 
 # Under the hood of React’s hooks system
+# React hooks 系统的原理
 
 Looking at the implementation and getting to know it inside out
 
@@ -26,6 +27,7 @@ A rough schematic representation of React’s hooks system
 First of all, let’s go through the mechanism that ensures that hooks are called within React’s scope, because you’d probably know by now that hooks are meaningless if not called in the right context:
 
 ### The dispatcher
+### dispatcher
 
 The dispatcher is the shared object that contains the hook functions. It will be dynamically allocated or cleaned up based on the rendering phase of ReactDOM, and it will ensure that the user doesn’t access hooks outside a React component (see [implementation](https://github.com/facebook/react/tree/5f06576f51ece88d846d01abd2ddd575827c6127/packages/react-reconciler/src/ReactFiberDispatcher.js#L24)).
 
@@ -64,6 +66,7 @@ _Dispatcher implementation in a nutshell._
 Now that we got that simple encapsulation mechanism covered, I would like us to move to the core of this article — the hooks. Right of the bet I’d like to introduce you to a new concept:
 
 ### The hooks queue
+### hooks 队列
 
 Behind the scenes, hooks are represented as nodes which are linked together in their calling order. They’re represented like so because hooks are not simply created and then left alone. They have a mechanism which allows them to be what they are. A hook has several properties which I would like you to bare in mind before diving into its implementation:
 
@@ -195,6 +198,7 @@ An external read of a component’s memoized state.
 Let’s get more specific and talk about individual hooks, starting with the most common of all — the state hook:
 
 ### State hooks
+### State hooks
 
 You would be surprised to know, but behind the scenes the `useState` hook uses `useReducer` and it simply provides it with a pre-defined reducer handler (see [implementation](https://github.com/facebook/react/blob/5f06576f51ece88d846d01abd2ddd575827c6127/packages/react-reconciler/src/ReactFiberHooks.js#L339)). This means that the results returned by `useState` are actually a reducer state, and an action dispatcher. I would like you to take a look at the reducer handler that the state hook uses:
 
@@ -232,6 +236,7 @@ Returning a new state relatively to the old one.
 
 Lastly, effect hooks — which made a major impact on a component’s life cycle and how it works:
 
+### Effect hooks
 ### Effect hooks
 
 Effect hooks behave slightly differently and has an additional layer of logic that I would like to explain. Again, there are things I would like you to bare in mind regards the properties of the effect hooks before I dive into the implementation:
@@ -343,6 +348,7 @@ Example of effects injection.
 * * *
 
 So that was it! What was your biggest takeout from this article? How are you gonna use this new knowledge in your React apps? Would love to see interesting comments!
+这就是 hooks 了！
 
 > 如果发现译文存在错误或其他需要改进的地方，欢迎到 [掘金翻译计划](https://github.com/xitu/gold-miner) 对译文进行修改并 PR，也可获得相应奖励积分。文章开头的 **本文永久链接** 即为本文在 GitHub 上的 MarkDown 链接。
 
